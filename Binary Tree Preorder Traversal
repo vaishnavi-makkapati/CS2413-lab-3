@@ -1,0 +1,47 @@
+// forward declrn if needed
+
+struct TreeNode* createTreeNode(int val) {
+    struct TreeNode* newNode = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    if (newNode == NULL) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    newNode->val = val;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+int countNodes(struct TreeNode* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+void preorder(struct TreeNode* root, int* ans, int* index) {
+    if (root == NULL) {
+        return;
+    }
+    ans[*index] = root->val;
+    (*index)++;
+    preorder(root->left, ans, index);
+    preorder(root->right, ans, index);
+}
+
+int* preorderTraversal(struct TreeNode* root, int* returnSize) {
+    if (root == NULL) {
+        *returnSize = 0;
+        return NULL;
+    }
+
+    int size = countNodes(root);
+    int* ans = (int*)malloc(sizeof(int) * size);
+
+
+    int index = 0;
+    preorder(root, ans, &index);
+
+    *returnSize = size;
+    return ans;
+}
